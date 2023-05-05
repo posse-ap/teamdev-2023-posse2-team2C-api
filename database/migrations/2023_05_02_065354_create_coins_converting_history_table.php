@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('coins_converting_history', function (Blueprint $table) {
+        Schema::create('coins_converting_histories', function (Blueprint $table) {
             $table->id();
             $table->integer("user_id");
             $table->integer("amount");
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('coins_converting_history');
+        Schema::dropIfExists('coins_converting_histories');
     }
 };

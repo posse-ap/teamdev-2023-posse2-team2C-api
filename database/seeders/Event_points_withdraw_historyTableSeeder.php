@@ -6,7 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class Event_participantTableSeeder extends Seeder
+class Event_points_withdraw_historyTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -64,7 +64,7 @@ class Event_participantTableSeeder extends Seeder
 
         foreach($params as $param) 
         {
-            DB::table('event_participants')->insert($param);
+            DB::table('event_points_withdraw_histories')->insert($param);
         }
     }
 }

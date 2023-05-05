@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('rental_coins_deposit_history', function (Blueprint $table) {
+        Schema::create('rental_coins_deposit_histories', function (Blueprint $table) {
             $table->id();
             $table->integer("user_id");
             $table->integer("amount");
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('rental_coins_deposit_history');
+        Schema::dropIfExists('rental_coins_deposit_histories');
     }
 };

@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
         $this->call(StatusTableSeeder::class);
         $this->call(Rental_points_withdraw_historyTableSeeder::class);
         $this->call(EventTableSeeder::class);
-        $this->call(Event_participantTableSeeder::class);
+        $this->call(Event_points_withdraw_historyTableSeeder::class);
         $this->call(Event_coins_deposit_historyTableSeeder::class);
         $this->call(Rental_coins_deposit_historyTableSeeder::class);
         $this->call(Coins_converting_historyTableSeeder::class);

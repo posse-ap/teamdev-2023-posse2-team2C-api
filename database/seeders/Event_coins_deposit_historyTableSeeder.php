@@ -27,7 +27,7 @@ class Event_coins_deposit_historyTableSeeder extends Seeder
 
         foreach($params as $param) 
         {
-            DB::table('event_coins_deposit_history')->insert(($param));
+            DB::table('event_coins_deposit_histories')->insert(($param));
         }
     }
 }

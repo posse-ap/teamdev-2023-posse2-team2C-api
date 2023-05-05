@@ -22,6 +22,7 @@ return new class extends Migration
             $table->integer("status_id");
             $table->timestamp("date");
             $table->timestamps();
+            $table->timestamp("deleted_at")->nullable();
         });
     }
 

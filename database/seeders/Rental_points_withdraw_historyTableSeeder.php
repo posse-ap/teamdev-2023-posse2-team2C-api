@@ -107,7 +107,7 @@ class Rental_points_withdraw_historyTableSeeder extends Seeder
 
         foreach($params as $param) 
         {
-            DB::table('rental_points_withdraw_history')->insert($param);
+            DB::table('rental_points_withdraw_histories')->insert($param);
         }
     }
 }

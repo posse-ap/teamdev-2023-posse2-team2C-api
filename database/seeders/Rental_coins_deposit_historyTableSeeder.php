@@ -63,7 +63,7 @@ class Rental_coins_deposit_historyTableSeeder extends Seeder
 
         foreach($params as $param)
         {
-            DB::table('rental_coins_deposit_history')->insert($param);
+            DB::table('rental_coins_deposit_histories')->insert($param);
         }
     }
 }

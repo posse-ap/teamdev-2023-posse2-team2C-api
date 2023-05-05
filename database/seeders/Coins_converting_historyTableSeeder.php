@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class Coins_converting_historyTableSeeder extends Seeder
 {
@@ -48,5 +49,10 @@ class Coins_converting_historyTableSeeder extends Seeder
                 'created_at' => '2022-04-25'
             ],
         ];
+
+        foreach($params as $param)
+        {
+            DB::table('coins_converting_histories')->insert($param);
+        }
     }
 }

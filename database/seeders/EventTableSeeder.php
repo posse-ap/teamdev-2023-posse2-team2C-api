@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class EventTableSeeder extends Seeder
 {
@@ -47,5 +48,10 @@ class EventTableSeeder extends Seeder
                 'updated_at' => '2023-03-10'
             ],
         ];
+
+        foreach($params as $param)
+        {
+            DB::table('events')->insert($param);
+        }
     }
 }

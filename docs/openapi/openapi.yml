@@ -8,11 +8,11 @@ paths:
     get:
       tags:
         - Users
-      description: 全ユーザー情報取得
-      operationId: GetUsers
+      description: ユーザー一覧用api
+      operationId: GetUserList
       responses:
         '200':
-          description: ユーザー情報取得成功
+          description: A list of users with their information
           content:
             application/json:
               schema:
@@ -20,164 +20,31 @@ paths:
                 items:
                   $ref: '#/components/schemas/User'
         default:
-          description: unexpected error
+          description: Unexpected error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-    post:
-      tags:
-        - Users
-      description: ユーザー情報登録
-      operationId: CreateUser
-      requestBody:
-        $ref: '#/components/requestBodies/CreateUserBody'
-      responses:
-        '201':
-          description: ユーザー情報登録成功
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        '422':
-          description: Unprocessable Entity
-        '500':
-          description: Internal Server Error
-  /users/{id}:
-    put:
-      tags:
-        - Users
-      description: ユーザー情報1件更新
-      operationId: UpdateUser
-      parameters:
-        - $ref: '#/components/parameters/UserId'
-      requestBody:
-        $ref: '#/components/requestBodies/UpdateUserBody'
-      responses:
-        '200':
-          description: ユーザー情報更新成功
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        '401':
-          description: Unauthorized Error
-        '404':
-          description: Not Found
-        '422':
-          description: Unprocessable Entity
-        '500':
-          description: Internal Server Error
 components:
-  securitySchemes:
-    Bearer:
-      type: http
-      scheme: bearer
-      description: Credentials or access token for API
-  parameters:
-    UserId:
-      name: id
-      in: path
-      description: ユーザーを識別するID
-      required: true
-      schema:
-        type: string
-  requestBodies:
-    UpdateUserBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/UpdateUser'
-    CreateUserBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/CreateUser'
   schemas:
-    UserId:
-      description: ユーザーのUUID
-      properties:
-        id:
-          type: string
-          example: 'fd7e7dd8-8ea6-4af9-8d56-11b8ef4486c9'
     User:
-      description: レスポンスで返すユーザー情報
       type: object
-      allOf:
-        - $ref: '#/components/schemas/UserBase'
-        - $ref: '#/components/schemas/UserId'
-      required:
-        - id
-    CreateUser:
-      description: 登録する際にリクエストに含めるユーザー情報
-      allOf:
-        - $ref: '#/components/schemas/UserBase'
-    UpdateUser:
-      description: 更新する際にリクエストに含めるユーザー情報
-      allOf:
-        - $ref: '#/components/schemas/UserBase'
-    UserBase:
-      description: ユーザー関連スキーマの共通部分
-      type: object
-      required:
-        - is_admin
-        - is_student
-        - last_name
-        - first_name
-        - nickname
-        - course_type
-        - email
-        - gender_id
-        - birthday
-        - prefecture
-        - is_experienced
       properties:
-        roles:
-          type: array
-          items:
-            type: object
-            properties:
-              role_name:
-                type: string
-                example: 'admin'
-              display_name:
-                type: string
-                example: '管理者'
-        last_name:
+        name:
           type: string
-          example: '山田'
-        first_name:
-          type: string
-          example: '太郎'
-        nickname:
-          type: string
-          example: '山風'
-        course_type:
+          example: 'name'
+        listed_items:
           type: integer
-          example: 1
-        email:
-          type: string
-          example: 'saikan1@email.com'
-        gender_id:
+          example: 10
+        coin_amount:
           type: integer
-          example: 1
-        birthday:
-          type: string
-          example: '2002-09-11'
-        prefecture:
-          type: string
-          example: '東京都'
-        is_experienced:
+          example: 100
+        point_amount:
+          type: integer
+          example: 150
+        is_admin:
           type: boolean
-          example: true
-        parent_last_name:
-          type: string
-          example: 'チーム開発'
-        parent_first_name:
-          type: string
-          example: '五郎'
+          example: false
     Error:
       type: object
       required:
@@ -191,4 +58,4 @@ components:
           type: string
 tags:
   - name: Users
-    description: ユーザーに関するAPI
+    description: User-related APIs

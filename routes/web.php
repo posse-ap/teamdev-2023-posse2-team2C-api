@@ -18,11 +18,12 @@ use App\Models\Event;
 
 Route::get('/', function () {
     return view('welcome');
+
 });
 
 // モデル動作チェック用
 Route::group(
-    ['prefix' => 'develop', 'as' => 'develop'],
+    ['prefix' => 'api', 'as' => 'api'],
     function () {
 
         // soft delete おためし
@@ -31,7 +32,7 @@ Route::group(
         });
         Route::get('/show/user', function () {
             $users = User::get();
-            dd($users);
+            return $users;
         });
 
         // ロール

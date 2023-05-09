@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
+use App\Http\Controllers\UserController;
+
 use App\Models\User;
 use App\Models\Item;
 use App\Models\Event;
@@ -20,6 +23,8 @@ Route::get('/', function () {
     return view('welcome');
 
 });
+
+Route::get('/users', [UserController::class, 'show']);
 
 // モデル動作チェック用
 Route::group(

@@ -12,7 +12,7 @@ class UserController extends Controller
     public function show()
     {
         $users = User::get();
-        $use_list = [];
+        $user_list = [];
         foreach ($users as $index => $user) {
             $user_name = $user->name;
             $listed_items = $user->items()->where('items.status_id', 3)->count();
@@ -25,6 +25,7 @@ class UserController extends Controller
                 "listed_items" => $listed_items,
                 "coin_amount" => $coin_amount,
                 "point_amount" => $point_amount,
+                "id" => $user->id,
                 "is_admin" => $is_admin,
             ];
         }

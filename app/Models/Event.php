@@ -18,6 +18,10 @@ class Event extends Model
 
     protected $guarded = [];
 
+    public function scopeShownCards($query) {
+        return $query->where("status_id", 6);
+    }
+
     // 主催者
     public function owner()
     {

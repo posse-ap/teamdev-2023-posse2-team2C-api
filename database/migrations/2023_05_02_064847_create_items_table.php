@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer("price")->nullable();
             $table->text("detail");
             $table->integer("status_id");
+            $table->text("image_url")->nullable();
             $table->integer("likes")->nullable();
             $table->timestamps();
             $table->timestamp('deleted_at')->nullable();

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->text("detail");
             $table->integer("participants");
             $table->integer("status_id");
+            $table->text("image_url")->nullable();
             $table->timestamp("date");
             $table->timestamps();
             $table->timestamp("deleted_at")->nullable();

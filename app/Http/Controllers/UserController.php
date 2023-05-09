@@ -21,11 +21,11 @@ class UserController extends Controller
             $is_admin = $user->role() === 'admin';
 
             $user_list[$index] = [
+                "id" => $user->id,
                 "name" => $user_name,
                 "listed_items" => $listed_items,
                 "coin_amount" => $coin_amount,
                 "point_amount" => $point_amount,
-                "id" => $user->id,
                 "is_admin" => $is_admin,
             ];
         }

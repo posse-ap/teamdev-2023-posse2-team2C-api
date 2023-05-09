@@ -1,0 +1,61 @@
+openapi: '3.0.0'
+info:
+  version: 1.0.0
+  title: teamdev-2023-posse2-team2C API
+  description: API for teamdev-2023-posse2-team2C.
+paths:
+  /users:
+    get:
+      tags:
+        - Users
+      description: ユーザー一覧用api
+      operationId: GetUserList
+      responses:
+        '200':
+          description: A list of users with their information
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'name'
+        listed_items:
+          type: integer
+          example: 10
+        coin_amount:
+          type: integer
+          example: 100
+        point_amount:
+          type: integer
+          example: 150
+        is_admin:
+          type: boolean
+          example: false
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+tags:
+  - name: Users
+    description: User-related APIs

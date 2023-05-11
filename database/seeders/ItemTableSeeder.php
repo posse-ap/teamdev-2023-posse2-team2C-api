@@ -25,7 +25,8 @@ class ItemTableSeeder extends Seeder
                 'price' => 500,
                 'detail' => '帽子だよ',
                 'status_id' => 3,
-                'likes' => 5000
+                'likes' => 5000,
+                'created_at' => '2023-01-01',
             ],
             [
                 'name' => 'ハット',
@@ -33,7 +34,8 @@ class ItemTableSeeder extends Seeder
                 'price' => 2500,
                 'detail' => 'ハットだよ',
                 'status_id' => 3,
-                'likes' => 15000
+                'likes' => 15000,
+                'created_at' => '2023-02-01',
             ],
             [
                 'name' => '鉛筆',
@@ -41,6 +43,7 @@ class ItemTableSeeder extends Seeder
                 'price' => null,
                 'detail' => '文具だね',
                 'status_id' => 1,
+                'created_at' => '2023-03-01',
             ],
             [
                 'name' => 'ノート',
@@ -48,7 +51,8 @@ class ItemTableSeeder extends Seeder
                 'price' => 500,
                 'detail' => 'ノート貸すってどゆこと',
                 'status_id' => 3,
-                'likes' => 300
+                'likes' => 300,
+                'created_at' => '2023-04-21',
             ],
         ];
         foreach($params as $param)

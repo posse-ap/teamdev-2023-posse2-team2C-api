@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CardController;
+
 
 use App\Models\User;
 use App\Models\Item;
@@ -25,6 +27,7 @@ Route::get('/', function () {
 });
 
 Route::get('/users', [UserController::class, 'show']);
+Route::get('/cards', [CardController::class, 'cards']);
 
 // モデル動作チェック用
 Route::group(

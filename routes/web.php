@@ -26,14 +26,20 @@ Route::get('/', function () {
 
 });
 
-Route::get('/users', [UserController::class, 'show']);
-Route::get('/cards', [CardController::class, 'cards']);
 
 // モデル動作チェック用
 Route::group(
     ['prefix' => 'api', 'as' => 'api'],
     function () {
+        // ユーザ一覧
+        Route::get('/users', [UserController::class, 'show']);
 
+        // topページカード一覧
+        Route::get('/cards', [CardController::class, 'cards']);
+
+
+
+        
         // soft delete おためし
         Route::get('/softdelete/user', function () {
             User::find(1)->delete();

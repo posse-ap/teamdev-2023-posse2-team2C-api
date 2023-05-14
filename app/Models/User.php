@@ -72,11 +72,6 @@ class User extends Authenticatable
         return $this->belongsTo(Introduction::class, 'id' ,'user_id')->first()->intro;
     }
 
-    public function rentals()
-    {
-        return $this->hasMany(Rental::class);
-    }
-
     // 自分が借りた・借りてる
     public function borrow()
     {

@@ -63,7 +63,7 @@ class Rental extends Model
      */
     private function estimateNextMonthCoin($user_id)
     {
-        $rentals = self::where('owner_id', $user_id)->getActiveRentals()->get();
+        $rentals = $this->where('owner_id', $user_id)->getActiveRentals()->get();
         $totalPrice = 0;
         foreach ($rentals as $rental) {
             $totalPrice += $rental->item->price;
@@ -79,7 +79,7 @@ class Rental extends Model
     public function insertRentalCoinsDepositHistory()
     {
         return $this->rental_coins_deposit_history()->create([
-            'user_id' => $this->user_id,
+            'user_id' => $this->owner_id,
             'amount' => $this->item->price,
             'rental_id' => $this->id,
         ]);

@@ -28,25 +28,25 @@ class UpdateUserPointsAndCoins extends Command
      */
     public function handle()
     {
-        User::with(['rentals' => function ($query) {
+        User::with(['borrow' => function ($query) {
             $query->whereNull('deleted_at');
-        }, 'rentals.item'])->get()->each(function ($user) {
+        }, 'borrow.item', 'lend' => function ($query) {
+            $query->whereNull('deleted_at');
+        }, 'lend.item'])->get()->each(function ($user) {
             $totalCoin = 0;
             $totalPoint = 0;
-            foreach ($user->rentals as $rental) {
-            // 取得コイン計算と、コイン取得履歴挿入
-                if ($rental->owner_id == $user->id) {
-                    $totalCoin += $rental->item->price;
-                    $rental->insertRentalCoinsDepositHistory();
-                }
-            // 継続ポイント計算と、ポイント使用履歴挿入
-                if ($rental->user_id == $user->id) {
-                    $totalPoint += $rental->item->price;
-                    $rental->insertRentalPointsWithdrawHistory(2); // $type 2: 継続
-                }
+            foreach ($user->lend as $lend) {
+                // 取得コイン計算と、コイン取得履歴挿入
+                $totalCoin += $lend->item->price;
+                $lend->insertRentalCoinsDepositHistory();
+            };
+            foreach ($user->borrow as $borrow) {
+                // 継続ポイント計算と、ポイント使用履歴挿入
+                $totalPoint += $borrow->item->price;
+                $borrow->insertRentalPointsWithdrawHistory(2); // $type 2: 継続
             }
 
-            // [持ちcoin/ptリセット]
+            // 持ちcoin/ptリセット
             $user->update(
                 ['coin' => $user->coin + $totalCoin, 'point' => 5000 - $totalPoint]
             );

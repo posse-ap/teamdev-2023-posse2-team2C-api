@@ -20,6 +20,10 @@ class Item extends Model
 
     protected $guarded = [];
 
+    public function scopeShownCards($query) {
+        return $query->where("status_id", 1)->orWhere("status_id", 3)->orWhere("status_id", 4);
+    }
+
     public function owner() {
         return $this->belongsTo(User::class, 'owner_id', 'id')->first()->name;
     }
@@ -35,8 +39,8 @@ class Item extends Model
         {
             $name = $elem->belongsTo(User::class, 'user_id', 'id')->first()->name;
             $start = $elem->created_at;
-            $start = (new Carbon($start))->toDateTimeString();
-            $end = $elem->deleted_at;
+            $start = (new Carbon($start))->toDateString();
+            $end = (new Carbon($elem->deleted_at))->toDateString();
             $history[$index] = [
                 'name' => $name,
                 'start' => $start,

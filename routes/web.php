@@ -1,6 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\CardController;
+
+
 use App\Models\User;
 use App\Models\Item;
 use App\Models\Event;
@@ -21,11 +26,20 @@ Route::get('/', function () {
 
 });
 
+
 // モデル動作チェック用
 Route::group(
     ['prefix' => 'api', 'as' => 'api'],
     function () {
+        // ユーザ一覧
+        Route::get('/users', [UserController::class, 'show']);
 
+        // topページカード一覧
+        Route::get('/cards', [CardController::class, 'cards']);
+
+
+
+        
         // soft delete おためし
         Route::get('/softdelete/user', function () {
             User::find(1)->delete();

@@ -14,12 +14,15 @@ class Rental extends Model
 
     protected $guarded = [];
 
-    public function owner()
-    {
-        return $this->belongsTo(User::class, 'owner_id', 'id');
+    public function owner() {
+        return $this->belongsTo(User::class, 'owner_id', 'id')->first()->name;
     }
 
-    public function item()
+    public function item() {
+        return $this->belongsTo(Item::class, 'item_id', 'id')->first()->name;
+    }
+
+    public function item_relation()
     {
         return $this->belongsTo(Item::class, 'item_id', 'id');
     }
@@ -49,7 +52,7 @@ class Rental extends Model
     {
         return $this->rental_points_withdraw_history()->create([
             'user_id' => $this->user_id,
-            'amount' => $this->item->price,
+            'amount' => $this->item_relation->price,
             'rental_id' => $this->id,
             'type' => $type,
         ]);
@@ -66,7 +69,7 @@ class Rental extends Model
         $rentals = $this->where('owner_id', $user_id)->getActiveRentals()->get();
         $totalPrice = 0;
         foreach ($rentals as $rental) {
-            $totalPrice += $rental->item->price;
+            $totalPrice += $rental->item_relation->price;
         }
         return $totalPrice;
     }
@@ -80,7 +83,7 @@ class Rental extends Model
     {
         return $this->rental_coins_deposit_history()->create([
             'user_id' => $this->owner_id,
-            'amount' => $this->item->price,
+            'amount' => $this->item_relation->price,
             'rental_id' => $this->id,
         ]);
     }

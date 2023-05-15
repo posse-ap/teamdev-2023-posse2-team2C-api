@@ -30,19 +30,19 @@ class UpdateUserPointsAndCoins extends Command
     {
         User::with(['borrow' => function ($query) {
             $query->whereNull('deleted_at');
-        }, 'borrow.item', 'lend' => function ($query) {
+        }, 'borrow.item_relation', 'lend' => function ($query) {
             $query->whereNull('deleted_at');
-        }, 'lend.item'])->get()->each(function ($user) {
+        }, 'lend.item_relation'])->get()->each(function ($user) {
             $totalCoin = 0;
             $totalPoint = 0;
             foreach ($user->lend as $lend) {
                 // 取得コイン計算と、コイン取得履歴挿入
-                $totalCoin += $lend->item->price;
+                $totalCoin += $lend->item_relation->price;
                 $lend->insertRentalCoinsDepositHistory();
             };
             foreach ($user->borrow as $borrow) {
                 // 継続ポイント計算と、ポイント使用履歴挿入
-                $totalPoint += $borrow->item->price;
+                $totalPoint += $borrow->item_relation->price;
                 $borrow->insertRentalPointsWithdrawHistory(2); // $type 2: 継続
             }
 

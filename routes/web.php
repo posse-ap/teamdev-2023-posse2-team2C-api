@@ -2,9 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 
+use Illuminate\Http\Request;
+
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CardController;
-
+use Illuminate\Support\Facades\Auth;
 
 use App\Models\User;
 use App\Models\Item;
@@ -31,6 +34,18 @@ Route::get('/', function () {
 Route::group(
     ['prefix' => 'api', 'as' => 'api'],
     function () {
+
+        Route::get('/loginCheck', function(){
+            return Auth::user();
+        });
+
+        Route::get('/csrf-token', function (Request $request) {
+            $token = $request->session()->token();
+            return $token;
+        });
+        
+        Route::post('/login', [AuthController::class, 'login']);
+
         // ユーザ一覧
         Route::get('/users', [UserController::class, 'show']);
 

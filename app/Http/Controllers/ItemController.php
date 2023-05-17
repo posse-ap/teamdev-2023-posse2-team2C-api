@@ -31,4 +31,25 @@ class ItemController extends Controller
             "history" => $item->history()
         ];
     }
+
+    public function item_thanks($item_id)
+    {
+        $item = Item::shownCards()->find($item_id);
+        $slack_id = $item->ownerSlackId();
+        $status = $item->status_id;
+        $price = $status === 1 ? "???" : $item->price;
+        $created_at = (new Carbon($item->created_at))->toDateString();
+
+        return [
+            "id" => $item->id,
+            "image_url" => $item->image_url,
+            "name" => $item->name,
+            "owner" => $item->owner(),
+            "slack_id" => $slack_id,
+            "status" => $status,
+            "price" => $price,
+            "created_at" => $created_at,
+            "history" => $item->history()
+        ];
+    }
 }

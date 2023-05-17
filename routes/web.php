@@ -41,6 +41,9 @@ Route::group(
         // アイテム詳細画面
         Route::get('/item/{item_id}', [ItemController::class, 'item']);
 
+        // アイテムレンタル完了画面
+        Route::get('/item_thanks/{item_id}', [ItemController::class, 'item_thanks']);
+
 
 
         

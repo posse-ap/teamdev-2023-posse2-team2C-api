@@ -20,6 +20,7 @@ class ItemTableSeeder extends Seeder
         $params = 
         [
             [
+                'image_url' => 'https://www.nakool.com/wordpress/wp-content/uploads/2014/06/IMG_9993.jpg',
                 'name' => 'ぼうし',
                 'owner_id' => 1,
                 'price' => 500,

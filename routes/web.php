@@ -35,10 +35,6 @@ Route::group(
     ['prefix' => 'api', 'as' => 'api'],
     function () {
 
-        Route::get('/loginCheck', function(){
-            return Auth::user();
-        });
-
         Route::get('/csrf-token', function (Request $request) {
             $token = $request->session()->token();
             return $token;

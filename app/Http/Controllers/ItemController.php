@@ -52,4 +52,30 @@ class ItemController extends Controller
             "history" => $item->history()
         ];
     }
+
+    // レンタル時のPOSTまとめ
+    // ①web.phpにメソッド追加 ②テーブルに挿入
+    // 例：Route::put('/users/role/{user_id}', [UserController::class, 'updateRole']);
+
+    /*
+        public function storeRentalData($user_id, $item_id, $owner_id, $request){
+        $newRoleId = $request->is_admin? 1: 2;
+        User::find($user_id)->update(['role_id' => $newRoleId]);
+    }
+    rentalsテーブルに以下の情報を挿入する
+    id	int(auto)	
+    item_id	int	（もらってくる）
+    user_id	int	（もらってくる）
+    owner_id	int	（もらってくる）
+    created_at	date	
+    deleted_at	date
+
+    rental_points_withdraw_history	
+    id	int(auto)	
+    user_id	int	（済）
+    amount	int	　（itemのpriceからもらってくる）
+    rental_id	int	　（itemのidと同値）
+    type	int	（新規なので1！）
+    created_at	date
+    */
 }

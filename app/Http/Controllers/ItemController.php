@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Models\Item;
 use App\Models\Event;
+use App\Models\Rental;
+use App\Models\Rental_points_withdraw_history;
 
 class ItemController extends Controller
 {
@@ -69,6 +71,8 @@ class ItemController extends Controller
     owner_id	int	（もらってくる）
     created_at	date	
     deleted_at	date
+
+    Rental::
 
     rental_points_withdraw_history	
     id	int(auto)	

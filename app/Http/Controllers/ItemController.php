@@ -56,23 +56,32 @@ class ItemController extends Controller
     }
 
     // レンタル時のPOSTまとめ
-    // ①web.phpにメソッド追加 ②テーブルに挿入
-    // 例：Route::put('/users/role/{user_id}', [UserController::class, 'updateRole']);
+    // ①web.phpにメソッド追加 Route::post('/items/rental/{user_id}', [ItemController::class, 'storeRentalData']);
+    // ②テーブルに挿入
+    public function storeRentalData($item_id, $request){
+        $rental = new Rental;
+        $rental->item_id = $item_id;
+        $rental->user_id = $request->user_id;
+        $rental->owner_id = Item::shownCards()->find($item_id)->owner();
+        $rental->save();
 
-    /*
-        public function storeRentalData($user_id, $item_id, $owner_id, $request){
-        $newRoleId = $request->is_admin? 1: 2;
-        User::find($user_id)->update(['role_id' => $newRoleId]);
+        $parent_id = $rental->id; // 親テーブルのIDを取得
+
+        $rental_history = new Rental_points_withdraw_history;
+        $rental_history->user_id = $request->user_id;
+        $rental_history->amount = Item::shownCards()->find($item_id)->price;
+        $rental_history->rental_id = $parent_id;
+        $rental_history->type = 1;
+        $rental_history->save();
     }
-    rentalsテーブルに以下の情報を挿入する
+
+    /* rentalsテーブルに以下の情報を挿入する
     id	int(auto)	
     item_id	int	（もらってくる）
     user_id	int	（もらってくる）
-    owner_id	int	（もらってくる）
+    owner_id	int	（itemのownerからもらってくる）
     created_at	date	
     deleted_at	date
-
-    Rental::
 
     rental_points_withdraw_history	
     id	int(auto)	

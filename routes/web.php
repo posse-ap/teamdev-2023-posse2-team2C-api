@@ -40,6 +40,7 @@ Route::group(
 
         // アイテム詳細画面
         Route::get('/items/{item_id}', [ItemController::class, 'item']);
+        Route::post('/items/{item_id}', [ItemController::class, 'storeRentalData']);
 
         // アイテムレンタル完了画面
         Route::get('/item_thanks/{item_id}', [ItemController::class, 'item_thanks']);

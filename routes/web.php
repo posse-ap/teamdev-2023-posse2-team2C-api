@@ -41,6 +41,7 @@ Route::group(
         });
         
         Route::post('/login', [AuthController::class, 'login']);
+        Route::post('/register', [AuthController::class, 'register']);
 
         // ユーザ一覧
         Route::get('/users', [UserController::class, 'show']);

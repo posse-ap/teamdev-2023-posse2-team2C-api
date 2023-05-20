@@ -12,6 +12,7 @@ use Illuminate\Http\JsonResponse;
 use Session;
 
 use App\Models\User;
+use Laravel\Ui\Presets\React;
 
 class AuthController extends Controller
 {
@@ -29,6 +30,26 @@ class AuthController extends Controller
         }
 
         throw new Exception('ログインに失敗しました。再度お試しください');
+    }
+
+    public function register(Request $request): JsonResponse
+    {
+        // return response()->json($request);
+        $credentials = $request->validate([
+            'name' => 'required',
+            'email' => ['required', 'email'],
+            'slack_id' => 'required',
+            'password' => 'required',
+        ]);
+        
+        if (User::checkEmail($credentials['email']))
+        {
+            return response()->json('このメールアドレスはすでに使われています');
+        } else {
+            User::newUser($credentials);
+            return response()->json('ユーザー登録が完了しました');
+        }
+
     }
 
     public function logout(Request $request)

@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
+use Exception;
+use Illuminate\Http\JsonResponse;
+
 use Session;
 
 use App\Models\User;
@@ -13,19 +16,19 @@ use App\Models\User;
 class AuthController extends Controller
 {
     //
-    public function login(Request $request)
+    public function login(Request $request): JsonResponse
     {
-        // return $request;
-        if (Auth::attempt($request->only(['email', 'password']))) {
-            // $request->session()->regenerate();
-            $user =  User::getUserFromEmail($request['email']);
-            $request->session()->put('user', $user);
-            dd($request->session());
-            return redirect('http://localhost:3000/UserTop');
-        } else {
-            // エラーレスポンスを返す
-            return response()->json(['message' => 'failed'], 401);
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => 'required',
+        ]);
+
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+            return response()->json(['name' => Auth::user()->email], 200);
         }
+
+        throw new Exception('ログインに失敗しました。再度お試しください');
     }
 
     public function logout(Request $request)

@@ -28,6 +28,10 @@ class Item extends Model
         return $this->belongsTo(User::class, 'owner_id', 'id')->first()->name;
     }
 
+    public function ownerSlackId() {
+        return $this->belongsTo(User::class, 'owner_id', 'id')->first()->slack_id;
+    }
+
     public function status() {
         return $this->belongsTo(Status::class, 'status_id', 'id')->first()->status;
     }

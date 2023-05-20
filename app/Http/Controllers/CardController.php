@@ -52,7 +52,7 @@ class CardController extends Controller
 
             $cards->add(
             [
-                "image_urs" => $image_url,
+                "image_url" => $image_url,
                 "name" => $name,
                 "participants" => $participants,
                 "owner" => $owner,

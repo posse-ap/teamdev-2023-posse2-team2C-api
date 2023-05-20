@@ -32,4 +32,13 @@ class UserController extends Controller
 
         return $user_list;
     }
+
+    public function destroy($user_id){
+        User::find($user_id)->delete();
+    }
+
+    public function updateRole($user_id, $request){
+        $newRoleId = $request->is_admin? 1: 2;
+        User::find($user_id)->update(['role_id' => $newRoleId]);
+    }
 }

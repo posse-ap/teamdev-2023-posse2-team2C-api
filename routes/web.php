@@ -24,7 +24,6 @@ use App\Models\Event;
 
 Route::get('/', function () {
     return view('welcome');
-
 });
 
 
@@ -34,9 +33,13 @@ Route::group(
     function () {
         // ユーザ一覧
         Route::get('/users', [UserController::class, 'show']);
+        Route::delete('/users/{user_id}', [UserController::class, 'destroy']);
+        Route::put('/users/role/{user_id}', [UserController::class, 'updateRole']);
+
 
         // topページカード一覧
         Route::get('/cards', [CardController::class, 'cards']);
+
 
         // アイテム詳細画面
         Route::get('/items/{item_id}', [ItemController::class, 'item']);
@@ -45,13 +48,6 @@ Route::group(
         // アイテムレンタル完了画面
         Route::get('/item_thanks/{item_id}', [ItemController::class, 'item_thanks']);
 
-
-
-        
-        // soft delete おためし
-        Route::get('/softdelete/user', function () {
-            User::find(1)->delete();
-        });
         Route::get('/show/user', function () {
             $users = User::get();
             return $users;

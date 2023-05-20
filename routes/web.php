@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CardController;
+use App\Http\Controllers\ItemController;
 
 
 use App\Models\User;
@@ -38,6 +39,14 @@ Route::group(
 
         // topページカード一覧
         Route::get('/cards', [CardController::class, 'cards']);
+
+
+        // アイテム詳細画面
+        Route::get('/items/{item_id}', [ItemController::class, 'item']);
+        Route::post('/items/{item_id}', [ItemController::class, 'storeRentalData']);
+
+        // アイテムレンタル完了画面
+        Route::get('/item_thanks/{item_id}', [ItemController::class, 'item_thanks']);
 
         Route::get('/show/user', function () {
             $users = User::get();

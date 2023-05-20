@@ -62,6 +62,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public static function getUserFromEmail($email)
+    {
+        return User::where('email', $email)->select('id', 'name', 'role_id', 'slack_id', 'point', 'coin', )->first();
+    }
+
     public function role()
     {
         return $this->belongsTo(Role::class, 'role_id', 'id')->first()->role;

@@ -32,9 +32,7 @@ Route::group(
     function () {
         // ユーザ一覧
         Route::get('/users', [UserController::class, 'show']);
-        Route::delete('/users/{user_id}', function ($user_id) {
-            User::find($user_id)->delete();
-        });
+        Route::delete('/users/{user_id}', [UserController::class, 'destroy']);
         Route::put('/users/role/{user_id}', [UserController::class, 'updateRole']);
 
 

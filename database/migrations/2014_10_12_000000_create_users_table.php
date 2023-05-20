@@ -20,10 +20,10 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->integer('role_id');
             $table->string('slack_id')->nullable();
-            $table->integer('point');
-            $table->integer('coin');
+            $table->integer('point')->nullable();
+            $table->integer('coin')->nullable();
             $table->string('password');
-            $table->rememberToken();
+            $table->rememberToken()->nullable();
             $table->timestamps();
             $table->timestamp('deleted_at')->nullable();
         });

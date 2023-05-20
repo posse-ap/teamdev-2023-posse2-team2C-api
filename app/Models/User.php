@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 use App\Models\Role;
 use App\Models\Introduction;
@@ -19,6 +20,7 @@ use App\Models\Event_coins_deposit_history;
 use App\Models\Event_points_withdraw_history;
 use App\Models\Rental_points_withdraw_history;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use DateTime;
 
 class User extends Authenticatable
 {
@@ -62,7 +64,21 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public static function getUserFromEmail($email)
+    public static function newUser($user) 
+    {
+        User::create([
+            'name' => $user['name'],
+            'email' => $user['email'],
+            'role_id' => 1,
+            'slack_id' => $user['slack_id'],
+            'password' => Hash::make($user['password']),
+            'point' => 5000,
+            'coin' => 0,
+            // 'created_at' => new DateTime('now'),
+        ]);
+    }
+
+    public static function checkEmail($email)
     {
         return User::where('email', $email)->select('id', 'name', 'role_id', 'slack_id', 'point', 'coin', )->first();
     }

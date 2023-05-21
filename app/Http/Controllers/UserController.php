@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Rental_coins_deposit_history;
+use App\Models\Rental_points_withdraw_history;
 use App\Models\User;
-
-use Illuminate\Http\Request;
+use App\Models\Rental;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class UserController extends Controller
 {
@@ -34,12 +37,46 @@ class UserController extends Controller
         return $user_list;
     }
 
-    public function destroy($user_id){
+    public function destroy($user_id)
+    {
         User::find($user_id)->delete();
     }
 
-    public function updateRole($user_id, $request){
-        $newRoleId = $request->is_admin? 1: 2;
+    public function updateRole($user_id, $request)
+    {
+        $newRoleId = $request->is_admin ? 1 : 2;
         User::find($user_id)->update(['role_id' => $newRoleId]);
+    }
+
+
+    public function userInfo()
+    {
+
+        // $user = Auth::user();
+        $user = User::find(3);
+        $lastMonth = Carbon::now()->subMonth()->endOfMonth();
+        $history = Rental_points_withdraw_history::where('user_id', $user->id)
+            ->whereNull('deleted_at')
+            ->where('created_at', '<=', $lastMonth)
+            ->sum('amount');
+        $deposit = Rental_coins_deposit_history::where('user_id', $user->id)->sum('amount');
+        $estimate = Rental::estimateNextMonthCoin($user->id);
+
+        $response = [
+            'account' => [
+                'name' => $user->name,
+            ],
+            'point' => [
+                'this_month' => $user->point,
+                'history' => $history,
+            ],
+            'coin' => [
+                'hold' => $user->coin,
+                'deposit' => $deposit,
+                'estimate' => $estimate,
+            ],
+        ];
+
+        return response()->json($response);
     }
 }

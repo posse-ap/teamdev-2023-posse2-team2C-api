@@ -40,7 +40,7 @@ Route::group(
             $token = $request->session()->token();
             return $token;
         });
-        
+
         Route::post('/login', [AuthController::class, 'login']);
         Route::post('/register', [AuthController::class, 'register']);
 
@@ -49,6 +49,8 @@ Route::group(
         Route::delete('/users/{user_id}', [UserController::class, 'destroy']);
         Route::put('/users/role/{user_id}', [UserController::class, 'updateRole']);
 
+        //マイページ
+        Route::get('/userInfo', [UserController::class, 'userInfo']);
 
         // topページカード一覧
         Route::get('/cards', [CardController::class, 'cards']);

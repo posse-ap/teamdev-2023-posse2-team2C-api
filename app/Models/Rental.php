@@ -14,11 +14,13 @@ class Rental extends Model
 
     protected $guarded = [];
 
-    public function owner() {
+    public function owner()
+    {
         return $this->belongsTo(User::class, 'owner_id', 'id')->first()->name;
     }
 
-    public function item() {
+    public function item()
+    {
         return $this->belongsTo(Item::class, 'item_id', 'id')->first()->name;
     }
 
@@ -38,7 +40,8 @@ class Rental extends Model
     }
 
     // 貸出中のアイテム取得
-    public function scopeGetActiveRentals($query) {
+    public function scopeGetActiveRentals($query)
+    {
         return $query->whereNull('deleted_at');
     }
 
@@ -61,16 +64,14 @@ class Rental extends Model
     /**
      * 来月に取得見込みコインの算出
      *
-     * @param int $type 1: 新規, 2: 継続
      * @return int
      */
-    private function estimateNextMonthCoin($user_id)
+    public static function estimateNextMonthCoin($user_id)
     {
-        $rentals = $this->where('owner_id', $user_id)->getActiveRentals()->get();
-        $totalPrice = 0;
-        foreach ($rentals as $rental) {
-            $totalPrice += $rental->item_relation->price;
-        }
+        $rentals = self::with('item_relation')->where('owner_id', $user_id)->getActiveRentals()->get();
+        $totalPrice = $rentals->sum(function ($rental) {
+            return $rental->item_relation->price;
+        });
         return $totalPrice;
     }
 

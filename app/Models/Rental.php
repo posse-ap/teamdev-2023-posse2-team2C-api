@@ -78,14 +78,16 @@ class Rental extends Model
     /**
      * コイン取得履歴の登録
      *
+     * @param int $type 1: 新規, 2: 継続
      * @return void
      */
-    public function insertRentalCoinsDepositHistory()
+    public function insertRentalCoinsDepositHistory($type)
     {
         return $this->rental_coins_deposit_history()->create([
             'user_id' => $this->owner_id,
             'amount' => $this->item_relation->price,
             'rental_id' => $this->id,
+            'type' => $type,
         ]);
     }
 }

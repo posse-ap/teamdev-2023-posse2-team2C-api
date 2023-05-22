@@ -6,11 +6,13 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Models\Item;
 use App\Models\Event;
+use App\Models\User;
 use App\Models\Rental;
 use App\Models\Rental_points_withdraw_history;
 
 class ItemController extends Controller
 {
+    // ＝＝＝＝＝＝＝＝＝＝＝アイテム詳細画面＝＝＝＝＝＝＝＝＝＝＝
     public function item($item_id)
     {
         $item = Item::shownCards()->find($item_id);
@@ -55,10 +57,52 @@ class ItemController extends Controller
         ];
     }
 
-    // レンタル時のPOSTまとめ
-    // ①web.phpにメソッド追加 Route::post('/items/rental/{user_id}', [ItemController::class, 'storeRentalData']);
-    // ②テーブルに挿入
-    public function storeRentalData($item_id, $request){
+    // ＝＝＝＝＝＝＝＝＝＝＝レンタル一覧画面＝＝＝＝＝＝＝＝＝＝＝
+    public function rentals()
+    {
+        $user_id = 3; //TODO：sessionから読み取れるようにする
+        $rental_info = User::find($user_id)->borrow()->get();
+        $item_ids = $rental_info->pluck('item_id');
+        $rental_items = [];
+        foreach ($item_ids as $item_id) {
+            $rental_items[] = $this->item($item_id);
+        }
+        return $rental_items;
+    }
+    
+    public function rental_detail($item_id)
+    {
+        $user_id = 3; //TODO：sessionから読み取れるようにする
+        $rental_days = (Rental::where('user_id', $user_id)->where('item_id', $item_id)->get()->pluck('created_at'));
+        foreach ($rental_days as $rental_day) {
+            $rental_at = $rental_day;
+        }//foreachしてるのは、同じ人が同じものを借りた場合、最後のものを取ってくるため＋pluckが配列で出力するため。
+        $rental_day = (new Carbon($rental_at))->toDateString();
+        $rental_item = Item::shownCards()->find($item_id);
+        $slack_id = $rental_item->ownerSlackId();
+        $status = $rental_item->status_id;
+        $price = $status === 1 ? "???" : $rental_item->price;
+        $created_at = (new Carbon($rental_item->created_at))->toDateString();
+
+        return [
+            "id" => $rental_item->id,
+            "image_url" => $rental_item->image_url,
+            "name" => $rental_item->name,
+            "likes" => $rental_item->likes,
+            "owner" => "出品者：" . $rental_item->owner(),
+            "slack_id" => $slack_id,
+            "detail" => $rental_item->detail,
+            "status" => $status,
+            "price" => $price,
+            "created_at" => $created_at,
+            "rental_day" => $rental_day,
+            "history" => $rental_item->history()
+        ];
+    }
+
+    // ＝＝＝＝＝＝＝＝＝＝＝アイテム詳細→決済のPOST＝＝＝＝＝＝＝＝＝＝＝
+    public function storeRentalData($item_id, $request)
+    {
         $rental = new Rental;
         $rental->item_id = $item_id;
         $rental->user_id = $request->user_id;

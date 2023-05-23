@@ -9,6 +9,7 @@ use App\Models\Item;
 use App\Models\Event;
 use App\Models\Rental;
 use App\Models\Rental_points_withdraw_history;
+use App\Models\User;
 
 class ItemController extends Controller
 {
@@ -63,9 +64,7 @@ class ItemController extends Controller
         ];
     }
 
-    // レンタル時のPOSTまとめ
-    // ①web.phpにメソッド追加 Route::post('/items/rental/{user_id}', [ItemController::class, 'storeRentalData']);
-    // ②テーブルに挿入
+    // レンタル完了
     public function storeRentalData($item_id){
         $rental = new Rental;
         $rental->item_id = $item_id;

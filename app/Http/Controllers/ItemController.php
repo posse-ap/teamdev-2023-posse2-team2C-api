@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\Item;
-use App\Models\Event;
 use App\Models\Rental;
 use App\Models\Rental_points_withdraw_history;
 use App\Models\User;
@@ -66,20 +65,31 @@ class ItemController extends Controller
 
     // レンタル完了
     public function storeRentalData($item_id){
+        $user_id = Auth::id();
+        $item_price = Item::shownCards()->find($item_id)->price;
+
         $rental = new Rental;
         $rental->item_id = $item_id;
-        $rental->user_id = Auth::id();
+        $rental->user_id = $user_id;
         $rental->owner_id = Item::shownCards()->find($item_id)->owner_id;
         $rental->save();
 
         $parent_id = $rental->id; // 親テーブルのIDを取得
 
         $rental_history = new Rental_points_withdraw_history;
-        $rental_history->user_id = Auth::id();
-        $rental_history->amount = Item::shownCards()->find($item_id)->price;
+        $rental_history->user_id = $user_id;
+        $rental_history->amount = $item_price;
         $rental_history->rental_id = $parent_id;
         $rental_history->type = 1;
         $rental_history->save();
+
+        $user = User::find($user_id);
+        $user->point -=  $item_price;
+        $user->save();
+
+        $item = Item::find($item_id);
+        $item->status_id = 4;
+        $item->save();
 
         return response()->json('レンタル完了', 200);
     }

@@ -14,8 +14,14 @@ class Authenticate extends Middleware
      */
     protected function redirectTo($request)
     {
-        if (! $request->expectsJson()) {
-            return route('login');
+        if (!$request->expectsJson()) {
+            return redirect("localhost:3000/auth/login");
         }
+    }
+    
+    //　認証されていない状態なら401エラーを返す
+    protected function unauthenticated($request, array $guards)
+    {
+        abort(response()->json(['error' => 'Unauthenticated.'], 401));
     }
 }

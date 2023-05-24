@@ -26,10 +26,10 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return response()->json(['name' => Auth::user()->email], 200);
+            return response()->json(['name' => Auth::user()->email, 'logged in' => true], 200);
+        } else {
+            return response()->json(['message' => 'メールアドレスかパスワードが間違っています。', 'logged in' => false], 200);
         }
-
-        throw new Exception('ログインに失敗しました。再度お試しください');
     }
 
     public function register(Request $request): JsonResponse

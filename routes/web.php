@@ -35,6 +35,8 @@ Route::get('/', function () {
 Route::group(
     ['prefix' => 'api', 'as' => 'api'],
     function () {
+        Route::post('/login', [AuthController::class, 'login']);
+        Route::post('/register', [AuthController::class, 'register']);
 
         Route::get('/csrf-token', function (Request $request) {
             $token = $request->session()->token();
@@ -166,5 +168,6 @@ Route::group(
             $items = Item::find($item_id)->likes();
             dd($items);
         });
-    }
-);
+        }
+    );
+    

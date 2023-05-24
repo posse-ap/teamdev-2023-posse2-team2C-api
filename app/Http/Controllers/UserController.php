@@ -6,6 +6,9 @@ use App\Models\User;
 
 use Illuminate\Http\Request;
 
+use Exception;
+use Illuminate\Http\JsonResponse;
+
 class UserController extends Controller
 {
     //
@@ -34,12 +37,16 @@ class UserController extends Controller
         return $user_list;
     }
 
-    public function destroy($user_id){
+    public function destroy($user_id): JsonResponse
+    {
         User::find($user_id)->delete();
+        return response()->json('削除完了', 200);
     }
 
-    public function updateRole($user_id, $request){
-        $newRoleId = $request->is_admin? 1: 2;
-        User::find($user_id)->update(['role_id' => $newRoleId]);
+    public function updateRole(Request $request): JsonResponse
+    {
+        $newRoleId = $request['is_admin'] ? 1: 2;
+        User::find($request['user_id'])->update(['role_id' => $newRoleId]);
+        return response()->json('変更完了', 200);
     }
 }

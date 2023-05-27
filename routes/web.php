@@ -51,6 +51,13 @@ Route::group(
 
         //マイページ
         Route::get('/userInfo', [UserController::class, 'userInfo']);
+        //詳細ページ
+        Route::get('/detail/point/this_month', [UserController::class, 'detailPointThisMonth']);
+        Route::get('/detail/point/history', [UserController::class, 'detailPointHistory']);
+        Route::get('/detail/coin/convert', [UserController::class, 'detailCoinConvert']);
+        Route::post('coin/convert', [UserController::class, 'coinConvert']);
+        Route::get('/detail/coin/deposit', [UserController::class, 'detailCoinDeposit']);
+        Route::get('/detail/coin/estimate', [UserController::class, 'detailCoinEstimate']);
 
         // topページカード一覧
         Route::get('/cards', [CardController::class, 'cards']);

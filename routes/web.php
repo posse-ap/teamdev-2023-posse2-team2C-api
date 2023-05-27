@@ -52,6 +52,8 @@ Route::group(
         Route::delete('/users/{user_id}', [UserController::class, 'destroy']);
         Route::put('/users/role/{user_id}', [UserController::class, 'updateRole']);
 
+        // アイテム出品
+        Route::post('/createItem', [ItemController::class, 'store']);
 
         // topページカード一覧
         Route::get('/cards', [CardController::class, 'cards']);

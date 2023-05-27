@@ -35,6 +35,9 @@ Route::get('/', function () {
 Route::group(
     ['prefix' => 'api', 'as' => 'api'],
     function () {
+        Route::post('/login', [AuthController::class, 'login']);
+        Route::get('logout', [AuthController::class, 'logout']);
+        Route::post('/register', [AuthController::class, 'register']);
 
         Route::get('/csrf-token', function (Request $request) {
             $token = $request->session()->token();
@@ -58,6 +61,8 @@ Route::group(
         Route::post('coin/convert', [UserController::class, 'coinConvert']);
         Route::get('/detail/coin/deposit', [UserController::class, 'detailCoinDeposit']);
         Route::get('/detail/coin/estimate', [UserController::class, 'detailCoinEstimate']);
+        // アイテム出品
+        Route::post('/createItem', [ItemController::class, 'store']);
 
         // topページカード一覧
         Route::get('/cards', [CardController::class, 'cards']);
@@ -65,7 +70,7 @@ Route::group(
 
         // アイテム詳細画面
         Route::get('/items/{item_id}', [ItemController::class, 'item']);
-        Route::post('/items/{item_id}', [ItemController::class, 'storeRentalData']);
+        Route::get('/items/payment/{item_id}', [ItemController::class, 'storeRentalData']);
 
         // アイテムレンタル完了画面
         Route::get('/item_thanks/{item_id}', [ItemController::class, 'item_thanks']);
@@ -175,5 +180,6 @@ Route::group(
             $items = Item::find($item_id)->likes();
             dd($items);
         });
-    }
-);
+        }
+    );
+    

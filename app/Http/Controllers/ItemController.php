@@ -24,7 +24,6 @@ class ItemController extends Controller
             $user_point = Auth::user()->point;
         }else{
             $user_point = null;
-
         }
 
         return [
@@ -64,23 +63,13 @@ class ItemController extends Controller
         ];
     }
 
-    // ＝＝＝＝＝＝＝＝＝＝＝レンタル一覧画面＝＝＝＝＝＝＝＝＝＝＝
-    public function rentals()
-    {
-        $user_id = 3; //TODO：sessionから読み取れるようにする
-        $rental_info = User::find($user_id)->borrow()->get();
-        $item_ids = $rental_info->pluck('item_id');
-        $rental_items = [];
-        foreach ($item_ids as $item_id) {
-            $rental_items[] = $this->item($item_id);
-        }
-        return $rental_items;
-    }
-    
+    // ＝＝＝＝＝＝＝＝＝＝＝レンタル詳細画面＝＝＝＝＝＝＝＝＝＝＝
+
     public function rental_detail($item_id)
     {
-        $user_id = 3; //TODO：sessionから読み取れるようにする
+        $user_id = Auth::id();
         $rental_days = (Rental::where('user_id', $user_id)->where('item_id', $item_id)->get()->pluck('created_at'));
+        $rental_at = null;
         foreach ($rental_days as $rental_day) {
             $rental_at = $rental_day;
         }//foreachしてるのは、同じ人が同じものを借りた場合、最後のものを取ってくるため＋pluckが配列で出力するため。

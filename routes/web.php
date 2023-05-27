@@ -62,7 +62,7 @@ Route::group(
         Route::get('/item_thanks/{item_id}', [ItemController::class, 'item_thanks']);
 
         // レンタル中のアイテム一覧画面
-        Route::get('/mypage/rentals', [ItemController::class, 'rentals']);
+        Route::get('/mypage/rentals', [CardController::class, 'rental_cards']);
         Route::get('/mypage/rentals/{item_id}', [ItemController::class, 'rental_detail']);
 
         Route::get('/show/user', function () {

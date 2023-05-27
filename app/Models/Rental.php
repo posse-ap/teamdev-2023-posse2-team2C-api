@@ -7,10 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Item;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Rental extends Model
 {
     use HasFactory;
+
+    use SoftDeletes;
 
     protected $guarded = [];
 

@@ -66,15 +66,15 @@ class ItemController extends Controller
 
     // 新規出品
     public function store(Request $request){
-        // $image = $request->file("image");
-        // $path = $image->store("public/image");
+        $image = $request->file("image");
+        $path = $image->store("public/image");
         $item = new Item;
         $item->name = $request["itemName"];
         $item->owner_id = Auth::id();
         $item->detail = $request["detail"];
         $item->status_id = 1;
         $item->likes = 0;
-        // $item->image_url = $image_path;
+        $item->image_url = "http://localhost:80" . Storage::url($path);
         $item->save();
         return response()->json("出品完了", 200);
     }

@@ -126,4 +126,12 @@ class ItemController extends Controller
         }
         return response()->json($data, 200);
     }
+    // 出品許可
+    public function setPrice($id, Request $request)
+    {
+        $item = Item::where('id', $id)->first();
+        $item->update(['status_id' => 3]);
+        $item->update(['price' => $request['price']]);
+        return response()->json('完了', 200);
+    }
 }

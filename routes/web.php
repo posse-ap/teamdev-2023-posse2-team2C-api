@@ -80,6 +80,8 @@ Route::group(
 
         // 出品申請一覧
         Route::get('/show/request', [ItemController::class, 'requests']);
+        // 出品許可
+        Route::post('/confirm/{id}', [ItemController::class, 'setPrice']);
 
         // ロール
         Route::get('/role/{user_id}', function ($user_id) {

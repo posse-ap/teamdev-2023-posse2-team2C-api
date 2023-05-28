@@ -13,6 +13,7 @@ use App\Models\User;
 
 class ItemController extends Controller
 {
+    // ＝＝＝＝＝＝＝＝＝＝＝アイテム詳細画面＝＝＝＝＝＝＝＝＝＝＝
     public function item($item_id)
     {
         $item = Item::shownCards()->find($item_id);
@@ -79,9 +80,41 @@ class ItemController extends Controller
         return response()->json("出品完了", 200);
     }
 
-    // レンタル完了
-    public function storeRentalData($item_id)
+        // ＝＝＝＝＝＝＝＝＝＝＝レンタル詳細画面＝＝＝＝＝＝＝＝＝＝＝
+
+    public function rental_detail($item_id)
     {
+        $user_id = 5;
+        // $user_id = Auth::id();
+        $rental_info = Rental::where('user_id', $user_id)->where('item_id', $item_id)->get()->last();
+        $rental_id = $rental_info->id;
+        $rental_day = (new Carbon($rental_info->created_at))->toDateString();
+        
+        $rental_item = Item::shownCards()->find($item_id);
+        $slack_id = $rental_item->ownerSlackId();
+        $status = $rental_item->status_id;
+        $price = $status === 1 ? "???" : $rental_item->price;
+        $created_at = (new Carbon($rental_item->created_at))->toDateString();
+
+        return [
+            "id" => $rental_item->id,
+            "rental_id" => $rental_id,
+            "image_url" => $rental_item->image_url,
+            "name" => $rental_item->name,
+            "likes" => $rental_item->likes,
+            "owner" => "出品者：" . $rental_item->owner(),
+            "slack_id" => $slack_id,
+            "detail" => $rental_item->detail,
+            "status" => $status,
+            "price" => $price,
+            "created_at" => $created_at,
+            "rental_day" => $rental_day,
+            "history" => $rental_item->history()
+        ];
+    }
+
+    // ＝＝＝＝＝＝＝＝＝＝＝アイテム詳細→決済＝＝＝＝＝＝＝＝＝＝＝
+    public function storeRentalData($item_id){
         $user_id = Auth::id();
         $item_price = Item::shownCards()->find($item_id)->price;
 
@@ -109,6 +142,18 @@ class ItemController extends Controller
         $item->save();
 
         return response()->json('レンタル完了', 200);
+    }
+
+    // ＝＝＝＝＝＝＝＝＝＝＝アイテム詳細→返却＝＝＝＝＝＝＝＝＝＝＝
+    public function storeReturnData($rental_id)
+    {
+        // TODO  Rental と Withdraw history (type = 2 継続分)をsoft delete
+
+        $item_id = Rental::find($rental_id)->item_id;
+        Rental::find($rental_id)->delete();
+        Rental_points_withdraw_history::where('rental_id', $rental_id)->where('type', 2)->delete();
+        Item::find($item_id)->update(['status_id' => 3]);
+        return response()->json('返却完了', 200);
     }
 
     // 出品申請一覧

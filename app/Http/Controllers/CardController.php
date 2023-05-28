@@ -8,6 +8,8 @@ use Carbon\Carbon;
 
 use App\Models\Item;
 use App\Models\Event;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class CardController extends Controller
 {
@@ -21,27 +23,27 @@ class CardController extends Controller
             $name = $item->name;
             $likes = $item->likes;
             $owner = "出品者：" . $item->owner();
-            $status = $item->status_id; 
+            $status = $item->status_id;
             $price = $status === 1 ? "???" : $item->price;
             $created_at = (new Carbon($item->created_at))->toDateString();
 
             $cards->add(
-            [
-                "image_url" => $image_url,
-                "name" => $name,
-                "likes" => $likes,
-                "owner" => $owner,
-                "status" => $status,
-                "price" => $price,
-                "is_item" => true,
-                "created_at" => $created_at,
-                "id" => $item->id,
-            ]);
+                [
+                    "image_url" => $image_url,
+                    "name" => $name,
+                    "likes" => $likes,
+                    "owner" => $owner,
+                    "status" => $status,
+                    "price" => $price,
+                    "is_item" => true,
+                    "created_at" => $created_at,
+                    "id" => $item->id,
+                ]
+            );
         }
 
         $events = Event::shownCards()->get();
-        foreach ($events as $event)
-        {
+        foreach ($events as $event) {
             $image_url = $event->image_url;
             $name = $event->name;
             $participants = $event->participants;
@@ -51,17 +53,18 @@ class CardController extends Controller
             $created_at = (new Carbon($event->created_at))->toDateString();
 
             $cards->add(
-            [
-                "image_url" => $image_url,
-                "name" => $name,
-                "participants" => $participants,
-                "owner" => $owner,
-                "status" => $status,
-                "date" => $date,
-                "is_item" => false,
-                "created_at" => $created_at,
-                "id" => $event->id,
-            ]);
+                [
+                    "image_url" => $image_url,
+                    "name" => $name,
+                    "participants" => $participants,
+                    "owner" => $owner,
+                    "status" => $status,
+                    "date" => $date,
+                    "is_item" => false,
+                    "created_at" => $created_at,
+                    "id" => $event->id,
+                ]
+            );
         }
 
         $cards = $cards->sortBy("created_at")->values()->toArray();
@@ -150,5 +153,51 @@ class CardController extends Controller
 
         // return response()->json($card, 200);
         return $card;
+    }
+
+    // ＝＝＝＝＝＝＝＝＝＝＝レンタル一覧画面＝＝＝＝＝＝＝＝＝＝＝
+    public function rental_cards()
+    {
+        if (Auth::check()) {
+            // $user_id = 5;
+            $user_id = Auth::id();
+            $rental_item_ids = User::find($user_id)->borrow()->where('deleted_at', null)->get()->pluck('item_id')->toArray();
+            $cards = collect([]);
+            if ($rental_item_ids) {
+                foreach (array_values($rental_item_ids) as $id) {
+                    $item = Item::find($id);
+                    if (is_null($item->image_url)) {
+                        $image_url = null;
+                    } else {
+                        $image_url = $item->image_url;
+                    }
+                    $name = $item->name;
+                    $likes = $item->likes;
+                    $owner = "出品者：" . $item->owner();
+                    $status = $item->status_id;
+                    $price = $status === 1 ? "???" : $item->price;
+                    $created_at = (new Carbon($item->created_at))->toDateString();
+
+                    $cards->add(
+                        [
+                            "image_url" => $image_url,
+                            "name" => $name,
+                            "likes" => $likes,
+                            "owner" => $owner,
+                            "status" => $status,
+                            "price" => $price,
+                            "is_item" => true,
+                            "created_at" => $created_at,
+                            "item_id" => $item->id
+                        ]
+                    );
+                }
+                return $cards;
+            } else {
+                return [];
+            }
+        } else {
+            return [];
+        }
     }
 }

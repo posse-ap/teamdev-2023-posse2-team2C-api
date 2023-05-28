@@ -38,7 +38,7 @@ class UpdateUserPointsAndCoins extends Command
             foreach ($user->lend as $lend) {
                 // 取得コイン計算と、コイン取得履歴挿入
                 $totalCoin += $lend->item_relation->price;
-                $lend->insertRentalCoinsDepositHistory();
+                $lend->insertRentalCoinsDepositHistory(2);
             };
             foreach ($user->borrow as $borrow) {
                 // 継続ポイント計算と、ポイント使用履歴挿入

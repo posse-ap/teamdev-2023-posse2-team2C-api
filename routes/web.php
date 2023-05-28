@@ -71,7 +71,10 @@ Route::group(
             return $users;
         });
 
+        // 換金申請一覧
         Route::get('/show/conversion', [AdminController::class, 'showConversion']);
+
+        Route::get('/convert/{conversion_id}', [AdminController::class, 'convert']);
 
         // ロール
         Route::get('/role/{user_id}', function ($user_id) {

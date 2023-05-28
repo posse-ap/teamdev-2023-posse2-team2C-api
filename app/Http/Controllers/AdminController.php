@@ -25,4 +25,12 @@ class AdminController extends Controller
 
         return response()->json($data, 200);
     }
+
+    public function convert($conversion_id) {
+        $conversion = Coins_converting_history::where('id', $conversion_id)->first();
+        $is_converted = $conversion->status === 9;
+        $newStat = $is_converted ? 10 : 9;
+        $conversion->update(['status' => $newStat]);
+        return response()->json('変更完了', 200);
+    }
 }

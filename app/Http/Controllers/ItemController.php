@@ -141,4 +141,21 @@ class ItemController extends Controller
         $item->update(['status_id' => 2]);
         return response()->json('完了', 200);
     }
+
+    // アイテム情報変更
+    public function update ($id, Request $request)
+    {
+        $item = Item::where('id', $id)->first();
+        $item->update([
+            'name' => $request['itemName'],
+            'detail' => $request['detail'],
+            'price' => $request['price'],
+        ]);
+        if($request->file('image')){
+            $image = $request->file('image');
+            $path = $image->store('public/image');
+            $item->update(['image_url' => 'http://localhost:80' . Storage::url($path)]);
+        }
+        return response()->json('更新完了', 200);
+    }
 }

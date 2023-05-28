@@ -58,6 +58,8 @@ Route::group(
         // topページカード一覧
         Route::get('/cards', [CardController::class, 'cards']);
 
+        // カード一枚分
+        Route::get('/card/{id}', [CardController::class, 'card']);
 
         // アイテム詳細画面
         Route::get('/items/{item_id}', [ItemController::class, 'item']);
@@ -84,6 +86,15 @@ Route::group(
         Route::post('/confirm/{id}', [ItemController::class, 'setPrice']);
         // 出品却下
         Route::get('/reject/{id}', [ItemController::class, 'reject']);
+
+        // カード全表示
+        Route::get('/allCards', [CardController::class, 'allCards']);
+
+        // アイテム編集保存
+        Route::post('/itemUpdate/{id}', [ItemController::class, 'update']);
+
+
+
 
         // ロール
         Route::get('/role/{user_id}', function ($user_id) {

@@ -22,9 +22,8 @@ class ItemController extends Controller
         $created_at = (new Carbon($item->created_at))->toDateString();
         if (Auth::check()) {
             $user_point = Auth::user()->point;
-        }else{
+        } else {
             $user_point = null;
-
         }
 
         return [
@@ -65,7 +64,8 @@ class ItemController extends Controller
     }
 
     // 新規出品
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $image = $request->file("image");
         $path = $image->store("public/image");
         $item = new Item;
@@ -80,7 +80,8 @@ class ItemController extends Controller
     }
 
     // レンタル完了
-    public function storeRentalData($item_id){
+    public function storeRentalData($item_id)
+    {
         $user_id = Auth::id();
         $item_price = Item::shownCards()->find($item_id)->price;
 
@@ -108,5 +109,21 @@ class ItemController extends Controller
         $item->save();
 
         return response()->json('レンタル完了', 200);
+    }
+
+    // 出品申請一覧
+    public function requests()
+    {
+        $applying = Item::statusEqual(1)->get();
+        $data = [];
+        foreach ($applying as $index => $erem) {
+            $data[$index] = [
+                'id' => $erem->id,
+                'user_name' => $erem->owner(),
+                'item_name' => $erem->name,
+                'RequestDateTime' => (new Carbon($erem->created_at))->toDateTimeString()
+            ];
+        }
+        return response()->json($data, 200);
     }
 }

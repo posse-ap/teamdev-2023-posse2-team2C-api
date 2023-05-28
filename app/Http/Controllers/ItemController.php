@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -63,7 +64,23 @@ class ItemController extends Controller
         ];
     }
 
-    // ＝＝＝＝＝＝＝＝＝＝＝レンタル詳細画面＝＝＝＝＝＝＝＝＝＝＝
+
+       // 新規出品
+    public function store(Request $request){
+        $image = $request->file("image");
+        $path = $image->store("public/image");
+        $item = new Item;
+        $item->name = $request["itemName"];
+        $item->owner_id = Auth::id();
+        $item->detail = $request["detail"];
+        $item->status_id = 1;
+        $item->likes = 0;
+        $item->image_url = "http://localhost:80" . Storage::url($path);
+        $item->save();
+        return response()->json("出品完了", 200);
+    }
+
+        // ＝＝＝＝＝＝＝＝＝＝＝レンタル詳細画面＝＝＝＝＝＝＝＝＝＝＝
 
     public function rental_detail($item_id)
     {
@@ -97,8 +114,7 @@ class ItemController extends Controller
     }
 
     // ＝＝＝＝＝＝＝＝＝＝＝アイテム詳細→決済＝＝＝＝＝＝＝＝＝＝＝
-    public function storeRentalData($item_id)
-    {
+    public function storeRentalData($item_id){
         $user_id = Auth::id();
         $item_price = Item::shownCards()->find($item_id)->price;
 

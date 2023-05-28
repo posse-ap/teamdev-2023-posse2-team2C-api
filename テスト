@@ -1,0 +1,89 @@
+/userInfo
+
+{
+    account: {
+        name: 'アカウント名'
+        image: '今は暫定のurlを返す'
+    }
+    point: {
+        this_month: 3500;
+        history: 18500;
+    }
+    coin: {
+        hold: 3500;
+        deposit: 5000;
+        estimate: 1500;
+    }
+}
+
+/detail/point/this_month
+[
+    {
+        id: 10,
+        type: {
+            id: 1,
+            name: '継続',
+        }
+        date: '2023-05-21',
+        name: '信田さんの帽子',
+        amount: 500,
+    },
+];
+
+/detail/point/history
+[
+    {
+        id: 10,
+        type: {
+            id: 1,
+            name: '継続',
+        }
+        date: '2023-05-21',
+        name: '信田さんの帽子',
+        amount: 500,
+    },
+    {}
+]
+
+/detail/coin/hold
+[
+    {
+        id: 10,
+        type: {
+            id: 1,
+            name: '処理中',
+        }
+        date: '2023-05-21',
+        name: '信田さんの帽子',
+        amount: 500,
+    },
+];
+
+coin/deposit
+[
+    {
+        id: 10,
+        type: {
+            id: 1,
+            name: '処理中',
+        }
+        date: '2023-05-21',
+        name: '信田さんの帽子',
+        amount: 500,
+    },
+];
+
+/detail/coin/estimate
+[
+    {
+        id: 10,
+        type: {
+            id: 1,
+            name: '処理中',
+        }
+        date: '2023-05-21',
+        name: '信田さんの帽子',
+        amount: 500,
+    },
+];
+

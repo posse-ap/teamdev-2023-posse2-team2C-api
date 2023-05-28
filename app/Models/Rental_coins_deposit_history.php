@@ -15,6 +15,10 @@ class Rental_coins_deposit_history extends Model
 
     // 対応するレンタルを呼び出し
     public function rental () {
-        return $this -> belongsTo(Rental::class, 'rental_id', 'rentals.id')->first()->item_id;
+        return $this -> belongsTo(Rental::class, 'rental_id', 'id')->first()->item_id;
+    }
+
+    public function rental_relation() {
+        return $this -> belongsTo(Rental::class, 'rental_id', 'id');
     }
 }

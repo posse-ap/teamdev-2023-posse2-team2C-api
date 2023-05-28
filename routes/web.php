@@ -85,10 +85,19 @@ Route::group(
             return $users;
         });
 
+        // 管理者用
+
         // 換金申請一覧
         Route::get('/show/conversion', [AdminController::class, 'showConversion']);
-
+        // 換金処理
         Route::get('/convert/{conversion_id}', [AdminController::class, 'convert']);
+
+        // 出品申請一覧
+        Route::get('/show/request', [ItemController::class, 'requests']);
+        // 出品許可
+        Route::post('/confirm/{id}', [ItemController::class, 'setPrice']);
+        // 出品却下
+        Route::get('/reject/{id}', [ItemController::class, 'reject']);
 
         // ロール
         Route::get('/role/{user_id}', function ($user_id) {

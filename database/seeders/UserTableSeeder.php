@@ -21,7 +21,7 @@ class UserTableSeeder extends Seeder
         [
             [
                 'name' => '金子夏蓮',
-                'email' => 'karen@email.com',
+                'email' => 'karen@anti-pattern.co.jp',
                 'role_id' => 1,
                 'slack_id' => 1,
                 'point' => 5000,
@@ -30,7 +30,7 @@ class UserTableSeeder extends Seeder
             ],
             [
                 'name' => '寺下渓志郎',
-                'email' => 'terashi@email.com',
+                'email' => 'terashi@anti-pattern.co.jp',
                 'role_id' => 1,
                 'slack_id' => 2,
                 'point' => 5000,
@@ -39,7 +39,7 @@ class UserTableSeeder extends Seeder
             ],
             [
                 'name' => '渡邊美由貴',
-                'email' => 'miyuki@email.com',
+                'email' => 'miyuki@anti-pattern.co.jp',
                 'role_id' => 1,
                 'slack_id' => 3,
                 'point' => 5000,
@@ -48,7 +48,7 @@ class UserTableSeeder extends Seeder
             ],
             [
                 'name' => '管理者',
-                'email' => 'admin@email.com',
+                'email' => 'admin@anti-pattern.co.jp',
                 'role_id' => 2,
                 'point' => 5000,
                 'coin' => 5000,

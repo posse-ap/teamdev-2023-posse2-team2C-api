@@ -51,7 +51,7 @@ class EventTableSeeder extends Seeder
 
         foreach($params as $param)
         {
-            DB::table('events')->insert($param);
+            // DB::table('events')->insert($param);
         }
     }
 }

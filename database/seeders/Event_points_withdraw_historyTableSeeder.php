@@ -64,7 +64,7 @@ class Event_points_withdraw_historyTableSeeder extends Seeder
 
         foreach($params as $param) 
         {
-            DB::table('event_points_withdraw_histories')->insert($param);
+            // DB::table('event_points_withdraw_histories')->insert($param);
         }
     }
 }

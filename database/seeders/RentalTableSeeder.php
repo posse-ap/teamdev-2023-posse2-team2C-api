@@ -18,12 +18,6 @@ class RentalTableSeeder extends Seeder
         //
         $params = [
             [
-                'item_id' => 1,
-                'user_id' => 3,
-                'owner_id' => 1,
-                'created_at' => '2023-04-15'
-            ],
-            [
                 'item_id' => 2,
                 'user_id' => 3,
                 'owner_id' => 1,
@@ -37,7 +31,7 @@ class RentalTableSeeder extends Seeder
                 'deleted_at' => '2023-03-15'
             ],
             [
-                'item_id' => 4,
+                'item_id' => 5,
                 'user_id' => 1,
                 'owner_id' => 2,
                 'created_at' => '2023-04-15'

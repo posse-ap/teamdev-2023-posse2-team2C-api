@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer("user_id");
             $table->integer("amount");
             $table->integer("rental_id");
+            $table->integer("type");
             $table->timestamps();
         });
     }

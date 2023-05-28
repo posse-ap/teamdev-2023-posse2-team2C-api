@@ -18,9 +18,14 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
+            $table->integer('role_id');
+            $table->string('slack_id')->nullable();
+            $table->integer('point')->nullable();
+            $table->integer('coin')->nullable();
             $table->string('password');
-            $table->rememberToken();
+            $table->rememberToken()->nullable();
             $table->timestamps();
+            $table->timestamp('deleted_at')->nullable();
         });
     }
 

@@ -63,10 +63,16 @@ Route::group(
         Route::get('/detail/coin/estimate', [UserController::class, 'detailCoinEstimate']);
         // アイテム出品
         Route::post('/createItem', [ItemController::class, 'store']);
+        // 自分の出品一覧
+        Route::get('/mypage/myItems', [CardController::class, 'myItems']);
+        // 自分の出品編集
+        Route::post('/itemUpdateByUser/{id}', [ItemController::class, 'updateMyItem']);
 
         // topページカード一覧
         Route::get('/cards', [CardController::class, 'cards']);
 
+        // カード一枚分
+        Route::get('/card/{id}', [CardController::class, 'card']);
 
         // アイテム詳細画面
         Route::get('/items/{item_id}', [ItemController::class, 'item']);
@@ -85,10 +91,28 @@ Route::group(
             return $users;
         });
 
+        // 管理者用
+
         // 換金申請一覧
         Route::get('/show/conversion', [AdminController::class, 'showConversion']);
-
+        // 換金処理
         Route::get('/convert/{conversion_id}', [AdminController::class, 'convert']);
+
+        // 出品申請一覧
+        Route::get('/show/request', [ItemController::class, 'requests']);
+        // 出品許可
+        Route::post('/confirm/{id}', [ItemController::class, 'setPrice']);
+        // 出品却下
+        Route::get('/reject/{id}', [ItemController::class, 'reject']);
+
+        // カード全表示
+        Route::get('/allCards', [CardController::class, 'allCards']);
+
+        // アイテム編集保存
+        Route::post('/itemUpdate/{id}', [ItemController::class, 'update']);
+
+
+
 
         // ロール
         Route::get('/role/{user_id}', function ($user_id) {

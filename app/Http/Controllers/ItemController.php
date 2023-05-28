@@ -64,9 +64,9 @@ class ItemController extends Controller
         ];
     }
 
-
-       // 新規出品
-    public function store(Request $request){
+    // 新規出品
+    public function store(Request $request)
+    {
         $image = $request->file("image");
         $path = $image->store("public/image");
         $item = new Item;
@@ -154,5 +154,71 @@ class ItemController extends Controller
         Rental_points_withdraw_history::where('rental_id', $rental_id)->where('type', 2)->delete();
         Item::find($item_id)->update(['status_id' => 3]);
         return response()->json('返却完了', 200);
+    }
+    // 出品申請一覧
+    public function requests()
+    {
+        $applying = Item::statusEqual(1)->get();
+        $data = [];
+        foreach ($applying as $index => $erem) {
+            $data[$index] = [
+                'id' => $erem->id,
+                'user_name' => $erem->owner(),
+                'item_name' => $erem->name,
+                'RequestDateTime' => (new Carbon($erem->created_at))->toDateTimeString()
+            ];
+        }
+        return response()->json($data, 200);
+    }
+    // 出品許可
+    public function setPrice($id, Request $request)
+    {
+        $item = Item::where('id', $id)->first();
+        $item->update(['status_id' => 3]);
+        $item->update(['price' => $request['price']]);
+        return response()->json('完了', 200);
+    }
+    // 出品却下
+    public function reject ($id)
+    {
+        $item = Item::where('id', $id)->first();
+        $item->update(['status_id' => 2]);
+        return response()->json('完了', 200);
+    }
+
+    // アイテム情報変更/admin
+    public function update ($id, Request $request)
+    {
+        $item = Item::where('id', $id)->first();
+        $item->update([
+            'name' => $request['itemName'],
+            'detail' => $request['detail'],
+            'price' => $request['price'],
+        ]);
+        if($request->file('image')){
+            $image = $request->file('image');
+            $path = $image->store('public/image');
+            $item->update(['image_url' => 'http://localhost:80' . Storage::url($path)]);
+        }
+        return response()->json('更新完了', 200);
+    }
+
+    // アイテム情報変更/user
+    public function updateMyItem($id, Request $request)
+    {
+        $item = Item::where('id', $id)->first();
+        if($item->owner_id !== Auth::id()){
+            return response()->json('あなたの出品ではありません。', 200);
+        }
+        $item->update([
+            'name' => $request['itemName'],
+            'detail' => $request['detail'],
+        ]);
+        if($request->file('image')){
+            $image = $request->file('image');
+            $path = $image->store('public/image');
+            $item->update(['image_url' => 'http://localhost:80' . Storage::url($path)]);
+        }
+        return response()->json('更新完了', 200);
     }
 }

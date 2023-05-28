@@ -63,6 +63,10 @@ Route::group(
         Route::get('/detail/coin/estimate', [UserController::class, 'detailCoinEstimate']);
         // アイテム出品
         Route::post('/createItem', [ItemController::class, 'store']);
+        // 自分の出品一覧
+        Route::get('/mypage/myItems', [CardController::class, 'myItems']);
+        // 自分の出品編集
+        Route::post('/itemUpdateByUser/{id}', [ItemController::class, 'updateMyItem']);
 
         // topページカード一覧
         Route::get('/cards', [CardController::class, 'cards']);

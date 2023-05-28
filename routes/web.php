@@ -82,6 +82,8 @@ Route::group(
         Route::get('/show/request', [ItemController::class, 'requests']);
         // 出品許可
         Route::post('/confirm/{id}', [ItemController::class, 'setPrice']);
+        // 出品却下
+        Route::get('/reject/{id}', [ItemController::class, 'reject']);
 
         // ロール
         Route::get('/role/{user_id}', function ($user_id) {

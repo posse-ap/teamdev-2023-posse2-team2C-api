@@ -22,7 +22,7 @@ class ItemController extends Controller
         $created_at = (new Carbon($item->created_at))->toDateString();
         if (Auth::check()) {
             $user_point = Auth::user()->point;
-        }else{
+        } else {
             $user_point = null;
         }
 
@@ -67,13 +67,12 @@ class ItemController extends Controller
 
     public function rental_detail($item_id)
     {
-        $user_id = Auth::id();
-        $rental_days = (Rental::where('user_id', $user_id)->where('item_id', $item_id)->get()->pluck('created_at'));
-        $rental_at = null;
-        foreach ($rental_days as $rental_day) {
-            $rental_at = $rental_day;
-        }//foreachしてるのは、同じ人が同じものを借りた場合、最後のものを取ってくるため＋pluckが配列で出力するため。
-        $rental_day = (new Carbon($rental_at))->toDateString();
+        $user_id = 5;
+        // $user_id = Auth::id();
+        $rental_info = Rental::where('user_id', $user_id)->where('item_id', $item_id)->get()->last();
+        $rental_id = $rental_info->id;
+        $rental_day = (new Carbon($rental_info->created_at))->toDateString();
+        
         $rental_item = Item::shownCards()->find($item_id);
         $slack_id = $rental_item->ownerSlackId();
         $status = $rental_item->status_id;
@@ -82,6 +81,7 @@ class ItemController extends Controller
 
         return [
             "id" => $rental_item->id,
+            "rental_id" => $rental_id,
             "image_url" => $rental_item->image_url,
             "name" => $rental_item->name,
             "likes" => $rental_item->likes,
@@ -96,7 +96,7 @@ class ItemController extends Controller
         ];
     }
 
-    // ＝＝＝＝＝＝＝＝＝＝＝アイテム詳細→決済のPOST＝＝＝＝＝＝＝＝＝＝＝
+    // ＝＝＝＝＝＝＝＝＝＝＝アイテム詳細→決済＝＝＝＝＝＝＝＝＝＝＝
     public function storeRentalData($item_id)
     {
         $user_id = Auth::id();
@@ -126,5 +126,20 @@ class ItemController extends Controller
         $item->save();
 
         return response()->json('レンタル完了', 200);
+    }
+
+    // ＝＝＝＝＝＝＝＝＝＝＝アイテム詳細→返却＝＝＝＝＝＝＝＝＝＝＝
+    public function storeReturnData($rental_id)
+    {
+        // $user_id = Auth::id();
+        $user_id = 5;
+
+        // TODO  Rental と Withdraw history (type = 2 継続分)をsoft delete
+
+        Rental::find($rental_id)->delete();
+
+        Rental_points_withdraw_history::where('rental_id', $rental_id)->where('type', 2)->delete();
+
+        return response()->json('返却完了', 200);
     }
 }

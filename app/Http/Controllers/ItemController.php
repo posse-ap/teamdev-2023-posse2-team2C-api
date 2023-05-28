@@ -84,8 +84,7 @@ class ItemController extends Controller
 
     public function rental_detail($item_id)
     {
-        $user_id = 5;
-        // $user_id = Auth::id();
+        $user_id = Auth::id();
         $rental_info = Rental::where('user_id', $user_id)->where('item_id', $item_id)->get()->last();
         $rental_id = $rental_info->id;
         $rental_day = (new Carbon($rental_info->created_at))->toDateString();
@@ -148,8 +147,6 @@ class ItemController extends Controller
     // ＝＝＝＝＝＝＝＝＝＝＝アイテム詳細→返却＝＝＝＝＝＝＝＝＝＝＝
     public function storeReturnData($rental_id)
     {
-        // TODO  Rental と Withdraw history (type = 2 継続分)をsoft delete
-
         $item_id = Rental::find($rental_id)->item_id;
         Rental::find($rental_id)->delete();
         Rental_points_withdraw_history::where('rental_id', $rental_id)->where('type', 2)->delete();

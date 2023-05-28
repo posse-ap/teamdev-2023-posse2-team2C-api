@@ -24,7 +24,6 @@ class ItemController extends Controller
         if (Auth::check()) {
             $user_point = Auth::user()->point;
         } else {
-        } else {
             $user_point = null;
         }
 

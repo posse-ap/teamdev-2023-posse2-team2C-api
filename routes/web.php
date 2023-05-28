@@ -6,11 +6,11 @@ use Illuminate\Http\Request;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CardController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ItemController;
-
-
+use App\Models\Coins_converting_history;
 use App\Models\User;
 use App\Models\Item;
 use App\Models\Event;
@@ -67,6 +67,8 @@ Route::group(
         // topページカード一覧
         Route::get('/cards', [CardController::class, 'cards']);
 
+        // カード一枚分
+        Route::get('/card/{id}', [CardController::class, 'card']);
 
         // アイテム詳細画面
         Route::get('/items/{item_id}', [ItemController::class, 'item']);
@@ -84,6 +86,29 @@ Route::group(
             $users = User::get();
             return $users;
         });
+
+        // 管理者用
+
+        // 換金申請一覧
+        Route::get('/show/conversion', [AdminController::class, 'showConversion']);
+        // 換金処理
+        Route::get('/convert/{conversion_id}', [AdminController::class, 'convert']);
+
+        // 出品申請一覧
+        Route::get('/show/request', [ItemController::class, 'requests']);
+        // 出品許可
+        Route::post('/confirm/{id}', [ItemController::class, 'setPrice']);
+        // 出品却下
+        Route::get('/reject/{id}', [ItemController::class, 'reject']);
+
+        // カード全表示
+        Route::get('/allCards', [CardController::class, 'allCards']);
+
+        // アイテム編集保存
+        Route::post('/itemUpdate/{id}', [ItemController::class, 'update']);
+
+
+
 
         // ロール
         Route::get('/role/{user_id}', function ($user_id) {

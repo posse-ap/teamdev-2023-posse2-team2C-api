@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Rental extends Model
 {
     use HasFactory;
-
     use SoftDeletes;
 
     protected $guarded = [];

@@ -72,11 +72,8 @@ class CardController extends Controller
     }
 
     // ＝＝＝＝＝＝＝＝＝＝＝レンタル一覧画面＝＝＝＝＝＝＝＝＝＝＝
-    public function rental_cards()
+    public function rental_cards($user_id)
     {
-        if (Auth::check()) {
-            // $user_id = 5;
-            $user_id = Auth::id();
             $rental_item_ids = User::find($user_id)->borrow()->where('deleted_at', null)->get()->pluck('item_id')->toArray();
             $cards = collect([]);
             if ($rental_item_ids) {
@@ -87,6 +84,7 @@ class CardController extends Controller
                     } else {
                         $image_url = $item->image_url;
                     }
+                    $item_id = $id;
                     $name = $item->name;
                     $likes = $item->likes;
                     $owner = "出品者：" . $item->owner();
@@ -104,7 +102,7 @@ class CardController extends Controller
                             "price" => $price,
                             "is_item" => true,
                             "created_at" => $created_at,
-                            "item_id" => $item->id
+                            "item_id" => $item_id
                         ]
                     );
                 }
@@ -112,8 +110,5 @@ class CardController extends Controller
             } else {
                 return [];
             }
-        } else {
-            return [];
-        }
     }
 }

@@ -43,7 +43,7 @@ Route::group(
             $token = $request->session()->token();
             return $token;
         });
-        
+
         Route::post('/login', [AuthController::class, 'login']);
         Route::post('/register', [AuthController::class, 'register']);
 
@@ -52,6 +52,15 @@ Route::group(
         Route::delete('/users/{user_id}', [UserController::class, 'destroy']);
         Route::put('/users/role/{user_id}', [UserController::class, 'updateRole']);
 
+        //マイページ
+        Route::get('/userInfo', [UserController::class, 'userInfo']);
+        //詳細ページ
+        Route::get('/detail/point/this_month', [UserController::class, 'detailPointThisMonth']);
+        Route::get('/detail/point/history', [UserController::class, 'detailPointHistory']);
+        Route::get('/detail/coin/convert', [UserController::class, 'detailCoinConvert']);
+        Route::post('coin/convert', [UserController::class, 'coinConvert']);
+        Route::get('/detail/coin/deposit', [UserController::class, 'detailCoinDeposit']);
+        Route::get('/detail/coin/estimate', [UserController::class, 'detailCoinEstimate']);
         // アイテム出品
         Route::post('/createItem', [ItemController::class, 'store']);
 

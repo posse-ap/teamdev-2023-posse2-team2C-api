@@ -21,43 +21,50 @@ class Rental_coins_deposit_historyTableSeeder extends Seeder
                 'user_id' => 1,
                 'amount' => 500,
                 'rental_id' => 1,
-                'created_at' => '2023-04-30'
+                'created_at' => '2023-04-30',
+                'type' => 1,
             ],
             [
                 'user_id' => 1,
                 'amount' => 2500,
                 'rental_id' => 2,
-                'created_at' => '2023-02-28'
+                'created_at' => '2023-02-28',
+                'type' => 1,
             ],
             [
                 'user_id' => 1,
                 'amount' => 2500,
                 'rental_id' => 2,
-                'created_at' => '2023-03-31'
+                'created_at' => '2023-03-31',
+                'type' => 2,
             ],
             [
                 'user_id' => 1,
                 'amount' => 2500,
                 'rental_id' => 2,
-                'created_at' => '2023-04-30'
+                'created_at' => '2023-04-30',
+                'type' => 2,
             ],
             [
                 'user_id' => 2,
                 'amount' => 500,
                 'rental_id' => 3,
-                'created_at' => '2023-01-31'
+                'created_at' => '2023-01-31',
+                'type' => 1,
             ],
             [
                 'user_id' => 2,
                 'amount' => 500,
                 'rental_id' => 3,
-                'created_at' => '2023-02-28'
+                'created_at' => '2023-02-28',
+                'type' => 2,
             ],
             [
                 'user_id' => 2,
                 'amount' => 500,
                 'rental_id' => 4,
-                'created_at' => '2023-04-30'
+                'created_at' => '2023-04-30',
+                'type' => 1,
             ],
         ];
 

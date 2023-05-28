@@ -6,11 +6,11 @@ use Illuminate\Http\Request;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CardController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ItemController;
-
-
+use App\Models\Coins_converting_history;
 use App\Models\User;
 use App\Models\Item;
 use App\Models\Event;
@@ -84,6 +84,11 @@ Route::group(
             $users = User::get();
             return $users;
         });
+
+        // 換金申請一覧
+        Route::get('/show/conversion', [AdminController::class, 'showConversion']);
+
+        Route::get('/convert/{conversion_id}', [AdminController::class, 'convert']);
 
         // ロール
         Route::get('/role/{user_id}', function ($user_id) {

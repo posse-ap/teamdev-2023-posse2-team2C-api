@@ -74,41 +74,46 @@ class CardController extends Controller
     // ＝＝＝＝＝＝＝＝＝＝＝レンタル一覧画面＝＝＝＝＝＝＝＝＝＝＝
     public function rental_cards()
     {
-        $cards = collect([]);
+        if (Auth::check()) {
+            // $user_id = 5;
+            $user_id = Auth::id();
+            $rental_item_ids = User::find($user_id)->borrow()->where('deleted_at', null)->get()->pluck('item_id')->toArray();
+            $cards = collect([]);
+            if ($rental_item_ids) {
+                foreach (array_values($rental_item_ids) as $id) {
+                    $item = Item::find($id);
+                    if (is_null($item->image_url)) {
+                        $image_url = null;
+                    } else {
+                        $image_url = $item->image_url;
+                    }
+                    $name = $item->name;
+                    $likes = $item->likes;
+                    $owner = "出品者：" . $item->owner();
+                    $status = $item->status_id;
+                    $price = $status === 1 ? "???" : $item->price;
+                    $created_at = (new Carbon($item->created_at))->toDateString();
 
-        // if (Auth::check()) {
-        $user_id = 5;
-        $rental_item_ids = User::find($user_id)->borrow()->where('deleted_at', null)->get()->pluck('item_id')->toArray();
-        foreach (array_values($rental_item_ids) as $id) {
-            $item = Item::find($id);
-            // $image_url = $item->image_url;
-            $name = $item->name;
-            $likes = $item->likes;
-            $owner = "出品者：" . $item->owner();
-            $status = $item->status_id;
-            $price = $status === 1 ? "???" : $item->price;
-            $created_at = (new Carbon($item->created_at))->toDateString();
-            // $rental_day = (new Carbon(Rental->created_at))->toDateString();
-
-            $cards->add(
-                [
-                    // "image_url" => $image_url,
-                    "name" => $name,
-                    "likes" => $likes,
-                    "owner" => $owner,
-                    "status" => $status,
-                    "price" => $price,
-                    "is_item" => true,
-                    "created_at" => $created_at,
-                    // "rental_day" => $rental_day,
-                    "item_id" => $item->id
-                ]
-            );
+                    $cards->add(
+                        [
+                            "image_url" => $image_url,
+                            "name" => $name,
+                            "likes" => $likes,
+                            "owner" => $owner,
+                            "status" => $status,
+                            "price" => $price,
+                            "is_item" => true,
+                            "created_at" => $created_at,
+                            "item_id" => $item->id
+                        ]
+                    );
+                }
+                return $cards;
+            } else {
+                return [];
+            }
+        } else {
+            return [];
         }
-
-        return $cards;
-        // } else {
-        //     return null;
-        // }
     }
 }

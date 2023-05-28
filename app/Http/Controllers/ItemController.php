@@ -131,15 +131,12 @@ class ItemController extends Controller
     // ＝＝＝＝＝＝＝＝＝＝＝アイテム詳細→返却＝＝＝＝＝＝＝＝＝＝＝
     public function storeReturnData($rental_id)
     {
-        // $user_id = Auth::id();
-        $user_id = 5;
-
         // TODO  Rental と Withdraw history (type = 2 継続分)をsoft delete
 
+        $item_id = Rental::find($rental_id)->item_id;
         Rental::find($rental_id)->delete();
-
         Rental_points_withdraw_history::where('rental_id', $rental_id)->where('type', 2)->delete();
-
+        Item::find($item_id)->update(['status_id' => 3]);
         return response()->json('返却完了', 200);
     }
 }

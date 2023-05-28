@@ -64,6 +64,7 @@ Route::group(
         // レンタル中のアイテム一覧画面
         Route::get('/mypage/rentals', [CardController::class, 'rental_cards']);
         Route::get('/mypage/rentals/{item_id}', [ItemController::class, 'rental_detail']);
+        Route::get('/mypage/rentals/return/{rental_id}', [ItemController::class, 'storeReturnData']);
 
         Route::get('/show/user', function () {
             $users = User::get();

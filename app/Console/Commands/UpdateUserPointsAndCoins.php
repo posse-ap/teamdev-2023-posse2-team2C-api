@@ -4,6 +4,8 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class UpdateUserPointsAndCoins extends Command
 {
@@ -33,23 +35,52 @@ class UpdateUserPointsAndCoins extends Command
         }, 'borrow.item_relation', 'lend' => function ($query) {
             $query->whereNull('deleted_at');
         }, 'lend.item_relation'])->get()->each(function ($user) {
-            $totalCoin = 0;
-            $totalPoint = 0;
+            // 一斉インサート用の配列を用意
+            $coinsDepositData = [];
+            $pointsWithdrawData = [];
+
             foreach ($user->lend as $lend) {
-                // 取得コイン計算と、コイン取得履歴挿入
-                $totalCoin += $lend->item_relation->price;
-                $lend->insertRentalCoinsDepositHistory(2);
-            };
-            foreach ($user->borrow as $borrow) {
-                // 継続ポイント計算と、ポイント使用履歴挿入
-                $totalPoint += $borrow->item_relation->price;
-                $borrow->insertRentalPointsWithdrawHistory(2); // $type 2: 継続
+                $coinsDepositData[] = [
+                    'user_id' => $lend->owner_id,
+                    'amount' => $lend->item_relation->price,
+                    'rental_id' => $lend->id,
+                    'type' => 2, // $type 2: 継続
+                ];
             }
 
-            // 持ちcoin/ptリセット
-            $user->update(
-                ['coin' => $user->coin + $totalCoin, 'point' => 5000 - $totalPoint]
-            );
+            foreach ($user->borrow as $borrow) {
+                $pointsWithdrawData[] = [
+                    'user_id' => $borrow->user_id,
+                    'amount' => $borrow->item_relation->price,
+                    'rental_id' => $borrow->id,
+                    'type' => 2, // $type 2: 継続
+                ];
+            }
+
+            DB::transaction(function () use ($coinsDepositData, $pointsWithdrawData, $user) {
+                try {
+
+                    // Bulk insert coin deposit histories
+                    if (!empty($coinsDepositData)) {
+                        DB::table('rental_coins_deposit_histories')->insert($coinsDepositData);
+                    }
+
+                    // Bulk insert points withdraw histories
+                    if (!empty($pointsWithdrawData)) {
+                        DB::table('rental_points_withdraw_histories')->insert($pointsWithdrawData);
+                    }
+
+                    // Calculate and update user coins and points
+                    $totalCoin = array_sum(array_column($coinsDepositData, 'amount'));
+                    $totalPoint = array_sum(array_column($pointsWithdrawData, 'amount'));
+
+                    $user->update(
+                        ['coin' => $user->coin + $totalCoin, 'point' => 5000 - $totalPoint]
+                    );
+                } catch (\Exception $e) {
+                    Log::error("Error processing user {$user->id}: " . $e->getMessage());
+                }
+            });
         });
     }
 }
